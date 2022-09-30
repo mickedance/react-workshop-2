@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, {  useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 const Form = (props) => {
-  const [formPerson, setFormPerson] = useState({});
   const [alert, setAlert] = useState({});
   let initalPerson = null;
   if (props.person != null) {
@@ -44,24 +43,39 @@ const Form = (props) => {
           }
         })
         .catch((e) => {
-            console.log(e.response.data)
-          setAlert({ errorMessage: "Unknown error" + e.response.data.statusText });
+            if(e.response.data!==undefined)
+                setAlert({ errorMessage: e.response.data.statusText });
+            else
+                setAlert({ errorMessage: "Unknown error" });
+
         });
       //Add new Person
     } else if (props.person == null) {
-      console.log("add person");
+     
       axios.post(baseUrl, data).then((response) => {
-        console.log(response);
-
         if (response.status === 201) {
           setAlert({ successMessage: "Person added" });
           setTimeout(() => {
             onReset();
             setAlert({});
           }, 750);
+        }else{
+            setAlert({ errorMessage: "DB connection failed" });
+          setTimeout(() => {
+            onReset();
+            setAlert({});
+          }, 1250);
         }
       }).catch((e)=>{
-            setAlert({ errorMessage: e.response.data.statusText });
+        
+            if( e.response.data!==undefined){
+                setAlert({ errorMessage: e.response.data.statusText });
+
+            }
+            else{
+                setAlert({errorMessage:'Unkown error'})
+                console.log('insdf')
+            }
             setTimeout(() => {
                 setAlert({});
           }, 1500);
@@ -69,7 +83,7 @@ const Form = (props) => {
     }
   };
   const onReset = () => {
-    console.log("reset");
+   
     if (props.person == null) {
       setPerson({});
       setValue("firstName", null );
@@ -77,7 +91,6 @@ const Form = (props) => {
       setValue("email", null);
       setValue("title", null);
     } else if (props.person != null) {
-      console.log("set inital");
       setValue("firstName", props.person.firstName);
       setValue("lastName", props.person.lastName);
       setValue("email", props.person.email);
