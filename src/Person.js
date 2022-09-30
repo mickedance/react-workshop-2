@@ -1,9 +1,10 @@
 import React from 'react';
+import Form from './Form';
 
 const Person = () => {
     return (
         <div>
-            Person
+            <Form></Form>
         </div>
     );
 };

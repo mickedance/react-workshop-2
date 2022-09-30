@@ -13,6 +13,7 @@ const Header = () => {
             <Link className="nav-item nav-link active" to="/home">Home</Link>
             <Link className="nav-item nav-link active" to="/person">Person</Link>
             <Link className="nav-item nav-link active" to="/about">About</Link>
+            <Link className="nav-item nav-link active" to="/crud">Crud</Link>
             <Link className='btn btn-primary' style={{position:'absolute', right:'20px'}} to="/register">Sign Up</Link>
           </div>
         </div>
